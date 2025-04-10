@@ -1,14 +1,13 @@
-LI_AT_COOKIE="cookie-goes-here"
-CHROMEDRIVER_PATH="chromedriver-linux64/chromedriver"
-SEARCH_QUERY="intern"
-AI_QUERY="I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond only with 'true' if it fits or 'false' if it does not. The criteria will come first and the job description will follow."
-JOB_CRITERIA="related to computer science or information technology, entry level internship"
-AI_BASE_URL="https://api.deepseek.com"
-AI_API_KEY="sk-apikeyhere"
-MODEL_NAME="deepseek-reasoner"
-MODEL_NAME_FILTER="deepseek-reasoner"
-MODEL_NAME_SUMMARY="deepseek-chat"
-NTFY_BASE_URL="https://ntfy.sh"
-NTFY_TOPIC="jobs"
+LI_AT_COOKIE=cookie-goes-here
+SEARCH_QUERY=intern
+AI_QUERY=I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond only with 'true' if it fits or 'false' if it does not. The criteria will come first and the job description will follow.
+JOB_CRITERIA="related to computer science or information technology, entry level internship
+AI_BASE_URL=https://api.deepseek.com
+AI_API_KEY=sk-apikeyhere
+MODEL_NAME=deepseek-reasoner
+MODEL_NAME_FILTER=deepseek-reasoner
+MODEL_NAME_SUMMARY=deepseek-chat
+NTFY_BASE_URL=https://ntfy.sh
+NTFY_TOPIC=jobs
 INTERVAL_MIN=30
 

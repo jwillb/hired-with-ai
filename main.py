@@ -1,15 +1,18 @@
 import sqlite3
 import logging
-from os import getenv, path, environ
+from os import getenv, path, environ, mkdir
 from dotenv import load_dotenv
 from time import sleep
+from selenium.webdriver.chrome.options import Options
 
 load_dotenv()
 from scraper import *
 from ai_query import *
 from notify import *
 
-table_name = "jobs.db"
+
+data_dir = "./data/"
+table_name = data_dir + "jobs.db"
 base_query = getenv("AI_QUERY")
 driver_path = getenv("CHROMEDRIVER_PATH")
 search_query = getenv("SEARCH_QUERY")
@@ -22,6 +25,17 @@ ntfy_url = getenv("NTFY_BASE_URL")
 ntfy_topic = getenv("NTFY_TOPIC")
 sleep_interval = int(getenv("INTERVAL_MIN")) * 60
 
+options = Options()
+options.add_argument("--no-sandbox")
+options.add_argument(f"--user-data-dir={data_dir}driver_data")
+options.add_argument("--headless=new")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-gpu")
+
+try:
+    mkdir(data_dir)
+except:
+    print("Data directory found.")
 
 if not path.exists(table_name):
     with sqlite3.connect(table_name) as conn:
@@ -79,7 +93,6 @@ def on_end():
         cursor.execute("SELECT * FROM jobs WHERE sent = 0 AND valid = 1")
         jobs_to_send = cursor.fetchall()
         for job in jobs_to_send:
-            print(job[0])
             send_job(job)
 
 print(f"""
@@ -89,9 +102,9 @@ Chromedriver path: {driver_path}
 Filtering model: {model_name_filter}
 Summarizing model: {model_name_summary}
 Notifications via {ntfy_url}/{ntfy_topic}
-Run every {sleep_interval / 60} minutes\n
+Run every {sleep_interval // 60} minutes
 """)
 
 while True:
-    linkedin_scrape(search_query, driver_path, on_data, on_error, on_end)
+    linkedin_scrape(search_query, driver_path, on_data, on_error, on_end, options)
     sleep(sleep_interval)

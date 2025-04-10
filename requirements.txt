@@ -1,0 +1,5 @@
+dotenv
+linkedin-jobs-scraper
+openai
+requests
+chromedriver-py
