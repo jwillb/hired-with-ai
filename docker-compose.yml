@@ -1,0 +1,9 @@
+services:
+  hired-with-ai:
+    image: jwillb321/hired-with-ai
+    container_name: hired-with-ai
+    restart: unless-stopped
+    env_file:
+      - sample-env
+    volumes:
+      - ./job_scrape_data:/home/runner/data # optional but highly recommended, to save previously seen jobs
