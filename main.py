@@ -1,6 +1,6 @@
 import sqlite3
 import logging
-from os import getenv, path, environ, mkdir
+from os import getenv, path, environ, makedirs
 from dotenv import load_dotenv
 from time import sleep
 from selenium.webdriver.chrome.options import Options
@@ -12,7 +12,7 @@ from notify import *
 
 
 data_dir = "./data/"
-table_name = data_dir + "jobs.db"
+table_name = path.join(data_dir, "jobs.db")
 base_query = getenv("AI_QUERY")
 driver_path = getenv("CHROMEDRIVER_PATH")
 search_query = getenv("SEARCH_QUERY")
@@ -32,10 +32,7 @@ options.add_argument("--headless=new")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
 
-try:
-    mkdir(data_dir)
-except:
-    print("Data directory found.")
+makedirs(data_dir, exist_ok=True)
 
 if not path.exists(table_name):
     with sqlite3.connect(table_name) as conn:

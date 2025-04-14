@@ -18,14 +18,14 @@ RUN apt-get install -y \
     libatk-bridge2.0-0 \
     libgtk-3-0 \
     libgbm-dev \
-    xvfb
+    xvfb \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-#COPY download-chromedriver.py .
-#RUN python download-chromedriver.py
-#RUN chmod +x chromedriver-linux64/chromedriver
+RUN mkdir -p ./data
+RUN chown runner ./data
 
 USER runner
 
@@ -33,7 +33,5 @@ COPY main.py .
 COPY scraper.py .
 COPY ai_query.py .
 COPY notify.py .
-
-#ENV CHROMEDRIVER_PATH=/usr/src/app/chromedriver-linux64/chromedriver
 
 CMD [ "python", "-u", "./main.py" ]

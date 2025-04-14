@@ -4,6 +4,6 @@ services:
     container_name: hired-with-ai
     restart: unless-stopped
     env_file:
-      - sample-env
+      - .env
     volumes:
       - ./job_scrape_data:/home/runner/data # optional but highly recommended, to save previously seen jobs
