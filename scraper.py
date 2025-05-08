@@ -8,7 +8,7 @@ def linkedin_scrape(search_term, chromedriver_path, data_callback, error_callbac
         chrome_executable_path=chromedriver_path,
         chrome_binary_location=None,
         chrome_options=driver_options,
-        max_workers=2,
+        max_workers=1,
         slow_mo=0.5,
         page_load_timeout=40  # Page load timeout (in seconds)    
     )

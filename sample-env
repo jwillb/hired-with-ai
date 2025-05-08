@@ -1,13 +1,13 @@
-LI_AT_COOKIE=cookie-goes-here
+LI_AT_COOKIE=AQEDAV_LINKEDIN_COOKIE_HERE
 SEARCH_QUERY=intern
 AI_QUERY=I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond only with 'true' if it fits or 'false' if it does not. The criteria will come first and the job description will follow.
-JOB_CRITERIA="related to computer science or information technology, entry level internship
-AI_BASE_URL=https://api.deepseek.com
-AI_API_KEY=sk-apikeyhere
-MODEL_NAME=deepseek-reasoner
-MODEL_NAME_FILTER=deepseek-reasoner
-MODEL_NAME_SUMMARY=deepseek-chat
-NTFY_BASE_URL=https://ntfy.sh
+JOB_CRITERIA=related to computer science or information technology, not ai training, entry level internship, not hardware design, can be achieved with a bachelors degree in computer science, not a tutoring position, does not require any prior experience in the field, if there position is in a gray area, it is better to accept the position than reject it
+AI_BASE_URL_FILTER=https://openrouter.ai/api/v1
+AI_BASE_URL_SUMMARY=https://openrouter.ai/api/v1
+AI_API_KEY_FILTER=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
+AI_API_KEY_SUMMARY=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
+MODEL_NAME_FILTER=deepseek/deepseek-r1:free
+MODEL_NAME_SUMMARY=deepseek/deepseek-chat-v3-0324:free
+NTFY_BASE_URL=https://ntfy.jwillb.net
 NTFY_TOPIC=jobs
-INTERVAL_MIN=30
-
+INTERVAL_MIN=360

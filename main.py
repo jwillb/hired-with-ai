@@ -19,8 +19,10 @@ search_query = getenv("SEARCH_QUERY")
 criteria = getenv("JOB_CRITERIA")
 model_name_filter = getenv("MODEL_NAME_FILTER")
 model_name_summary = getenv("MODEL_NAME_SUMMARY")
-api_key = getenv("AI_API_KEY")
-base_url = getenv("AI_BASE_URL")
+api_key_filter = getenv("AI_API_KEY_FILTER")
+api_key_summary = getenv("AI_API_KEY_SUMMARY")
+base_url_filter = getenv("AI_BASE_URL_FILTER")
+base_url_summary = getenv("AI_BASE_URL_SUMMARY")
 ntfy_url = getenv("NTFY_BASE_URL")
 ntfy_topic = getenv("NTFY_TOPIC")
 sleep_interval = int(getenv("INTERVAL_MIN")) * 60
@@ -56,7 +58,7 @@ def on_data(data):
         cursor = conn.cursor()
         cursor.execute("SELECT EXISTS(SELECT 1 FROM jobs WHERE title = ? AND company = ? LIMIT 1)", (data.title, data.company))
     if cursor.fetchone()[0] == 0:
-        valid = jobQuery(api_key, base_url, model_name_filter, base_query, criteria, data.company, data.description)
+        valid = jobQuery(api_key_filter, base_url_filter, model_name_filter, base_query, criteria, data.company, data.description)
         with sqlite3.connect(table_name) as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -72,7 +74,7 @@ def on_data(data):
         print("Already found.")
 
 def send_job(job_tuple):
-    summary = jobSummary(api_key, base_url, model_name_summary, job_tuple[3], job_tuple[4], job_tuple[1])
+    summary = jobSummary(api_key_summary, base_url_summary, model_name_summary, job_tuple[3], job_tuple[4], job_tuple[1])
     print(f"Sending job from {job_tuple[3]}...")
     notify(ntfy_url, ntfy_topic, summary)
     with sqlite3.connect(table_name) as conn:
