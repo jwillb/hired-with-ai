@@ -8,7 +8,7 @@ To use this program, you must install Python, and the `pip` package manager. The
 Alternatively, you can run the program using Docker.
 ## Usage
 ### Manual
-After this is done, copy the `sample-env` file and rename it to `.env`. Then, set all of the environment variables to your liking (TODO: add environment variable for multiple LLM API URLs).
+After this is done, copy the `sample-env` file and rename it to `.env`. Then, set all of the environment variables to your liking.
 ### Docker
 Edit the provided Compose file and sample-env file to your liking, then run `docker compose up -d`. Installing and using Docker is out of the scope of this guide, but there are many resources available online to help with this.
 ## Credits
