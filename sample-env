@@ -1,7 +1,7 @@
 LI_AT_COOKIE=AQEDAV_LINKEDIN_COOKIE_HERE
 SEARCH_QUERY=intern
-AI_QUERY=I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond only with 'true' if it fits or 'false' if it does not. The criteria will come first and the job description will follow.
-JOB_CRITERIA=related to computer science or information technology, not ai training, entry level internship, not hardware design, can be achieved with a bachelors degree in computer science, not a tutoring position, does not require any prior experience in the field, if there position is in a gray area, it is better to accept the position than reject it
+AI_QUERY="I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond only with 'true' if it fits or 'false' if it does not. The criteria will come first and the job description will follow."
+JOB_CRITERIA="related to computer science or information technology, not ai training, entry level internship, not hardware design, can be achieved with a bachelors degree in computer science, not a tutoring position, does not require any prior experience in the field, if there position is in a gray area, it is better to accept the position than reject it"
 AI_BASE_URL_FILTER=https://openrouter.ai/api/v1
 AI_BASE_URL_SUMMARY=https://api.deepseek.com
 AI_API_KEY_FILTER=sk-ai-api-key
@@ -10,4 +10,4 @@ MODEL_NAME_FILTER=deepseek/deepseek-r1:free
 MODEL_NAME_SUMMARY=deepseek-chat
 NTFY_BASE_URL=https://ntfy.sh
 NTFY_TOPIC=insert-topic-here
-INTERVAL_MIN=360
+INTERVAL_MIN=180
