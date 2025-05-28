@@ -2,17 +2,18 @@ import openai
 
 def jobQuery(api_key, base_url, model_name, base_query, criteria, company, job_desc):
     client = openai.OpenAI(api_key=api_key, base_url=base_url)
+    query_string = f"{base_query}\nJob Criteria: {criteria}\nCompany: {company}\nJob Description: {job_desc}"
 
     response = client.chat.completions.create(
         model=model_name,
         messages=[
-            {"role": "user", "content": f"{base_query}\nJob Criteria: {criteria}\nCompany: {company}\nJob Description: {job_desc}"}
+            {"role": "user", "content": query_string}
         ],
         temperature=0,
         stream=False
     )
 
-    return response.choices[0].message.content.strip() == 'true'
+    return response.choices[0].message.content[:4].strip() == 'true', response.choices[0].message.content.split('\n')[1]
 
 def jobSummary(api_key, base_url, model_name, company, job_desc, link):
     client = openai.OpenAI(api_key=api_key, base_url=base_url)
