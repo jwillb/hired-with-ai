@@ -4,6 +4,8 @@ from os import getenv, path, environ, makedirs
 from dotenv import load_dotenv
 from time import sleep
 from selenium.webdriver.chrome.options import Options
+import datetime
+
 
 load_dotenv()
 from scraper import *
@@ -13,7 +15,6 @@ from notify import *
 
 data_dir = "./data/"
 table_name = path.join(data_dir, "jobs.db")
-base_query = getenv("AI_QUERY")
 driver_path = getenv("CHROMEDRIVER_PATH")
 search_query = getenv("SEARCH_QUERY")
 criteria = getenv("JOB_CRITERIA")
@@ -26,6 +27,8 @@ base_url_summary = getenv("AI_BASE_URL_SUMMARY")
 ntfy_url = getenv("NTFY_BASE_URL")
 ntfy_topic = getenv("NTFY_TOPIC")
 sleep_interval = int(getenv("INTERVAL_MIN")) * 60
+found_jobs = 0
+sent_jobs = 0
 
 options = Options()
 options.add_argument("--no-sandbox")
@@ -53,12 +56,14 @@ if not path.exists(table_name):
 
 # Fired once for each successfully processed job
 def on_data(data):
-    print(f"Found job from {data.company} ({data.date_text})")
+    global found_jobs
+    print(f"Found {data.title} job from {data.company} ({data.date_text})")
+    found_jobs += 1
     with sqlite3.connect(table_name) as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT EXISTS(SELECT 1 FROM jobs WHERE title = ? AND company = ? LIMIT 1)", (data.title, data.company))
     if cursor.fetchone()[0] == 0:
-        valid, reasoning = jobQuery(api_key_filter, base_url_filter, model_name_filter, base_query, criteria, data.company, data.description)
+        valid, reasoning = jobQuery(api_key_filter, base_url_filter, model_name_filter, criteria, data.company, data.description)
         with sqlite3.connect(table_name) as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -75,6 +80,7 @@ def on_data(data):
         print("Already found.")
 
 def send_job(job_tuple):
+    global sent_jobs
     summary = jobSummary(api_key_summary, base_url_summary, model_name_summary, job_tuple[3], job_tuple[4], job_tuple[1])
     print(f"Sending job from {job_tuple[3]}...")
     notify(ntfy_url, ntfy_topic, summary)
@@ -82,6 +88,7 @@ def send_job(job_tuple):
         cursor = conn.cursor()
         cursor.execute("UPDATE jobs SET sent = 1 WHERE id = ?", (job_tuple[0],))
         conn.commit()
+    sent_jobs += 1
 
 def on_error(error):
     pass
@@ -105,6 +112,13 @@ Notifications via {ntfy_url}/{ntfy_topic}
 Run every {sleep_interval // 60} minutes
 """)
 
+
 while True:
+    current_time = datetime.datetime.now()
+    print(current_time.strftime("Current time: %H:%M:%S"))
     linkedin_scrape(search_query, driver_path, on_data, on_error, on_end, options)
+    print(f"Found {found_jobs} jobs")
+    print(f"Sent {sent_jobs} jobs")
+    found_jobs = 0
+    sent_jobs = 0
     sleep(sleep_interval)

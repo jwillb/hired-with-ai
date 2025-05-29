@@ -9,7 +9,7 @@ def linkedin_scrape(search_term, chromedriver_path, data_callback, error_callbac
         chrome_binary_location=None,
         chrome_options=driver_options,
         max_workers=1,
-        slow_mo=0.5,
+        slow_mo=0.8,
         page_load_timeout=40  # Page load timeout (in seconds)    
     )
 
@@ -27,13 +27,13 @@ def linkedin_scrape(search_term, chromedriver_path, data_callback, error_callbac
                 filters=QueryFilters(
                     relevance=RelevanceFilters.RELEVANT,
                     time=TimeFilters.DAY,
-                    type=[TypeFilters.INTERNSHIP],
                     industry=[IndustryFilters.IT_SERVICES, 
                               IndustryFilters.ELECTRONIC_MANUFACTURING, 
                               IndustryFilters.INFORMATION_SERVICES, 
                               IndustryFilters.SOFTWARE_DEVELOPMENT, 
                               IndustryFilters.TECHNOLOGY_INTERNET, 
-                              IndustryFilters.COMPUTER_GAMES]
+                              IndustryFilters.COMPUTER_GAMES,
+                              IndustryFilters.FINANCIAL_SERVICES]
                 )
             )
         ),

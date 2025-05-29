@@ -1,8 +1,8 @@
 import openai
 
-def jobQuery(api_key, base_url, model_name, base_query, criteria, company, job_desc):
+def jobQuery(api_key, base_url, model_name, criteria, company, job_desc):
     client = openai.OpenAI(api_key=api_key, base_url=base_url)
-    query_string = f"{base_query}\nJob Criteria: {criteria}\nCompany: {company}\nJob Description: {job_desc}"
+    query_string = f"I am looking for a job in my field. I am going to give you a description of a job and you need to tell me if the job fits my criteria. Respond with 'true' if it fits or 'false' if it does not. Additionally, write a short phrase about why it does or does not fit, separated from the boolean with only a newline character. The criteria will come first and the job description will follow.\nJob Criteria: {criteria}\nCompany: {company}\nJob Description: {job_desc}"
 
     response = client.chat.completions.create(
         model=model_name,
