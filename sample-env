@@ -11,3 +11,4 @@ NTFY_BASE_URL=https://ntfy.sh
 NTFY_TOPIC=insert-topic-here
 INTERVAL_MIN=180
 DELETE_EVERY=16
+TZ=America/Edmonton
