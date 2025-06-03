@@ -51,7 +51,8 @@ if not path.exists(table_name):
                         company TEXT NOT NULL,
                         description TEXT NOT NULL,
                         valid BOOL NOT NULL,
-                        sent BOOL NOT NULL
+                        sent BOOL NOT NULL,
+                        time_found TEXT NOT NULL
                 )""")
         conn.commit()
 
@@ -70,16 +71,17 @@ def on_data(data):
         cursor.execute("SELECT EXISTS(SELECT 1 FROM jobs WHERE title = ? AND company = ? LIMIT 1)", (data.title, data.company))
     if cursor.fetchone()[0] == 0:
         valid, reasoning = jobQuery(api_key_filter, base_url_filter, model_name_filter, criteria, data.company, data.description)
+        current_time = datetime.datetime.now()
         with sqlite3.connect(table_name) as conn:
             cursor = conn.cursor()
             cursor.execute("""
                     INSERT OR IGNORE INTO jobs (
-                        link, title, company, description, valid, sent
+                        link, title, company, description, valid, sent, time_found
                     )
                     VALUES (
-                        ?,?,?,?,?,?
+                        ?,?,?,?,?,?,?
                     )
-                    """, (data.link, data.title, data.company, data.description, valid, False))
+                    """, (data.link, data.title, data.company, data.description, valid, False, current_time.strftime("%H:%M")))
             conn.commit()
         print(reasoning)
     else:
@@ -87,7 +89,7 @@ def on_data(data):
 
 def send_job(job_tuple):
     global sent_jobs
-    summary = jobSummary(api_key_summary, base_url_summary, model_name_summary, job_tuple[3], job_tuple[4], job_tuple[1])
+    summary = jobSummary(api_key_summary, base_url_summary, model_name_summary, job_tuple[3], job_tuple[4], job_tuple[1], job_tuple[7])
     print(f"Sending job from {job_tuple[3]}...")
     notify(ntfy_url, ntfy_topic, summary)
     with sqlite3.connect(table_name) as conn:

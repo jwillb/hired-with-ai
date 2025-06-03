@@ -15,7 +15,7 @@ def jobQuery(api_key, base_url, model_name, criteria, company, job_desc):
 
     return response.choices[0].message.content[:4].strip() == 'true', response.choices[0].message.content.split('\n')[1]
 
-def jobSummary(api_key, base_url, model_name, company, job_desc, link):
+def jobSummary(api_key, base_url, model_name, company, job_desc, link, time_found):
     client = openai.OpenAI(api_key=api_key, base_url=base_url)
 
     response = client.chat.completions.create(
@@ -27,4 +27,4 @@ def jobSummary(api_key, base_url, model_name, company, job_desc, link):
         stream=False
     )
     desc_summary = response.choices[0].message.content
-    return f"**Company**: {company}\n**Summary**: {desc_summary}\nLink: [View on LinkedIn]({link})"
+    return f"**Time**: {time_found}\n**Company**: {company}\n**Summary**: {desc_summary}\nLink: [View on LinkedIn]({link})"
