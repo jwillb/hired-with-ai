@@ -27,11 +27,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN mkdir -p ./data
 RUN chown runner ./data
 
-USER runner
-
 COPY main.py .
 COPY scraper.py .
 COPY ai_query.py .
 COPY notify.py .
+
+USER runner
 
 CMD [ "python", "-u", "./main.py" ]
