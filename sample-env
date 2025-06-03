@@ -10,4 +10,4 @@ MODEL_NAME_SUMMARY=deepseek-chat
 NTFY_BASE_URL=https://ntfy.sh
 NTFY_TOPIC=insert-topic-here
 INTERVAL_MIN=180
-DELETE_EVERY=12
+DELETE_EVERY=16
