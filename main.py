@@ -27,6 +27,7 @@ base_url_summary = getenv("AI_BASE_URL_SUMMARY")
 ntfy_url = getenv("NTFY_BASE_URL")
 ntfy_topic = getenv("NTFY_TOPIC")
 sleep_interval = int(getenv("INTERVAL_MIN")) * 60
+delete_interval = int(getenv("DELETE_EVERY"))
 found_jobs = 0
 sent_jobs = 0
 
@@ -54,10 +55,15 @@ if not path.exists(table_name):
                 )""")
         conn.commit()
 
+def empty_table(table_name):
+    with sqlite3.connect(table_name) as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM jobs")
+
 # Fired once for each successfully processed job
 def on_data(data):
     global found_jobs
-    print(f"Found {data.title} job from {data.company} ({data.date_text})")
+    print(f"Found {data.title.replace(' with verification', '')} job from {data.company} ({data.date_text})")
     found_jobs += 1
     with sqlite3.connect(table_name) as conn:
         cursor = conn.cursor()
@@ -110,15 +116,22 @@ Filtering model: {model_name_filter}
 Summarizing model: {model_name_summary}
 Notifications via {ntfy_url}/{ntfy_topic}
 Run every {sleep_interval // 60} minutes
+Empty database every {(delete_interval * sleep_interval) // 3600} hours ({delete_interval} runs)
 """)
 
+interval_counter = 1
 
 while True:
     current_time = datetime.datetime.now()
     print(current_time.strftime("Current time: %H:%M:%S"))
     linkedin_scrape(search_query, driver_path, on_data, on_error, on_end, options)
-    print(f"Found {found_jobs} jobs")
-    print(f"Sent {sent_jobs} jobs")
+    print(f"Found {found_jobs} job(s).")
+    print(f"Sent {sent_jobs} job(s).")
     found_jobs = 0
     sent_jobs = 0
+    print(f"Run {interval_counter} time(s).")
+    if interval_counter % delete_interval == 0:
+        print("Erasing database.")
+        empty_table(table_name)
+    interval_counter += 1
     sleep(sleep_interval)
